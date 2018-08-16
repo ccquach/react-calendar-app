@@ -4,8 +4,11 @@ import styled from 'styled-components';
 import Moment from 'react-moment';
 
 const Wrapper = styled.div`
+  min-width: 8rem;
+  min-height: 8rem;
   flex: 1;
-  background-color: #fff;
+  background-color: ${props =>
+    props.nodate ? 'rgba(27, 20, 100, .2)' : '#fff'};
   margin: 2px;
   position: relative;
 `;
@@ -19,7 +22,7 @@ const Display = styled(Moment)`
 
 const Day = ({ data }) => {
   return (
-    <Wrapper>
+    <Wrapper nodate={data ? false : true}>
       {data ? <Display format="D">{data}</Display> : <span>&nbsp;</span>}
     </Wrapper>
   );
