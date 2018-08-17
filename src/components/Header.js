@@ -19,7 +19,7 @@ const months = [
 
 const Wrapper = styled.header`
   text-align: center;
-  margin: 3rem 2rem;
+  margin-bottom: 3rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
