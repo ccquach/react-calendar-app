@@ -5,7 +5,8 @@ import moment from 'moment';
 
 import Header from './Header';
 import Month from './Month';
-import { getReminders } from '../store/actions';
+import ReminderForm from './ReminderForm';
+import { getReminders, addReminder } from '../store/actions';
 
 const Container = styled.main`
   min-width: 80rem;
@@ -18,7 +19,8 @@ const Container = styled.main`
 class App extends Component {
   state = {
     month: moment().month(),
-    year: moment().year()
+    year: moment().year(),
+    isOpen: false
   };
 
   componentDidMount = () => {
@@ -50,9 +52,15 @@ class App extends Component {
     );
   };
 
+  toggleModal = () => {
+    this.setState({
+      isOpen: !this.state.isOpen
+    });
+  };
+
   render() {
     const { reminders } = this.props;
-    const { month, year } = this.state;
+    const { month, year, isOpen } = this.state;
     return (
       <Container>
         <Header
@@ -60,7 +68,13 @@ class App extends Component {
           year={year}
           onMonthChange={this.handleMonthChange}
         />
-        <Month month={month} year={year} reminders={reminders} />
+        <Month
+          month={month}
+          year={year}
+          reminders={reminders}
+          toggleModal={this.toggleModal}
+        />
+        <ReminderForm isOpen={isOpen} toggleModal={this.toggleModal} />
       </Container>
     );
   }
@@ -72,5 +86,5 @@ const mapStateToDispatch = state => ({
 
 export default connect(
   mapStateToDispatch,
-  { getReminders }
+  { getReminders, addReminder }
 )(App);

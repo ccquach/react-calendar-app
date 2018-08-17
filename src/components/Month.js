@@ -20,7 +20,7 @@ const getDaysOfWeek = (days, firstWeek, i) =>
       firstWeek + i
   );
 
-const Month = ({ month, year, reminders }) => {
+const Month = ({ month, year, reminders, toggleModal }) => {
   // get array of days for the month
   const days = getDaysInMonth(month, year);
   // get week index of first week of the month
@@ -59,7 +59,14 @@ const Month = ({ month, year, reminders }) => {
       });
 
       // add to weeks array
-      weeks.push(<Week key={`week-${i}`} index={firstWeek + i} days={data} />);
+      weeks.push(
+        <Week
+          key={`week-${i}`}
+          index={firstWeek + i}
+          days={data}
+          toggleModal={toggleModal}
+        />
+      );
       // restart firstWeek at 1 if previous value is 52
       if (firstWeek === 52) firstWeek = 0;
     }
@@ -83,7 +90,8 @@ Month.propTypes = {
         })
       ).isRequired
     }).isRequired
-  ).isRequired
+  ).isRequired,
+  toggleModal: PropTypes.func.isRequired
 };
 
 export default Month;

@@ -11,6 +11,10 @@ const Wrapper = styled.div`
     props.nodate ? 'rgba(27, 20, 100, .2)' : '#fff'};
   margin: 2px;
   position: relative;
+
+  &:hover > button {
+    opacity: 0.3;
+  }
 `;
 
 const Display = styled(Moment)`
@@ -29,12 +33,29 @@ const Reminders = styled.div`
   width: 100%;
 `;
 
-const Day = ({ date, reminders }) => {
+const AddButton = styled.button`
+  position: absolute;
+  top: 0.7rem;
+  right: 0.7rem;
+  background-color: #1b1464;
+  border: none;
+  border-radius: 50%;
+  padding: 3px 7px;
+  font-size: 1.5rem;
+  color: #fff;
+  cursor: pointer;
+  z-index: 100;
+  opacity: 0;
+  transition: opacity 0.3s ease-out;
+`;
+
+const Day = ({ date, reminders, toggleModal }) => {
   const sortedReminders =
     reminders && !!reminders.length ? sortReminders(reminders) : null;
 
   return (
     <Wrapper nodate={date ? false : true}>
+      {date && <AddButton onClick={toggleModal}>&#43;</AddButton>}
       {date ? <Display format="D">{date}</Display> : <span>&nbsp;</span>}
       <Reminders>
         {sortedReminders ? (
@@ -57,7 +78,8 @@ Day.propTypes = {
       text: PropTypes.string.isRequired,
       color: PropTypes.string.isRequired
     })
-  )
+  ),
+  toggleModal: PropTypes.func.isRequired
 };
 
 export default Day;

@@ -1,4 +1,4 @@
-import { GET_REMINDERS } from './actionTypes';
+import { GET_REMINDERS, ADD_REMINDER } from './actionTypes';
 import moment from 'moment';
 
 const DEFAULT_STATE = [
@@ -34,12 +34,13 @@ const DEFAULT_STATE = [
 export default (state = DEFAULT_STATE, action) => {
   switch (action.type) {
     case GET_REMINDERS:
-      debugger;
       return DEFAULT_STATE.filter(
         r =>
           moment(r.date).month() === action.month &&
           moment(r.date).year() === action.year
       );
+    case ADD_REMINDER:
+      return [...DEFAULT_STATE, action.reminder];
     default:
       return state;
   }

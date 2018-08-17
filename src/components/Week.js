@@ -11,7 +11,7 @@ const Wrapper = styled.div`
   display: flex;
 `;
 
-const Week = ({ index, days }) => {
+const Week = ({ index, days, toggleModal }) => {
   let daysList = [];
   let daysIdx = 0;
   // render seven Day components, mapping date to correct day of week
@@ -23,6 +23,7 @@ const Week = ({ index, days }) => {
         key={`week${index}-day${i}`}
         date={isMatching ? dayObj.date : null}
         reminders={isMatching ? dayObj.items : null}
+        toggleModal={toggleModal}
       />
     );
     if (isMatching) daysIdx++;
@@ -44,7 +45,8 @@ Week.propTypes = {
         })
       ).isRequired
     })
-  ).isRequired
+  ).isRequired,
+  toggleModal: PropTypes.func.isRequired
 };
 
 export default Week;
