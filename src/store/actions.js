@@ -6,7 +6,8 @@ export const getReminders = (month, year) => ({
   year
 });
 
-export const addReminder = reminder => ({
+export const addReminder = (reminder, activeDate) => ({
   type: ADD_REMINDER,
-  reminder
+  reminder,
+  activeDate
 });

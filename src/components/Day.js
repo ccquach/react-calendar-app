@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import Moment from 'react-moment';
 import Reminder from './Reminder';
-import { sortReminders } from '../helpers/sortReminders';
+import { sortReminders } from '../utils/sortReminders';
 
 const Wrapper = styled.div`
   flex: 1;
@@ -55,7 +55,7 @@ const Day = ({ date, reminders, toggleModal }) => {
 
   return (
     <Wrapper nodate={date ? false : true}>
-      {date && <AddButton onClick={toggleModal}>&#43;</AddButton>}
+      {date && <AddButton onClick={() => toggleModal(date)}>&#43;</AddButton>}
       {date ? <Display format="D">{date}</Display> : <span>&nbsp;</span>}
       <Reminders>
         {sortedReminders ? (

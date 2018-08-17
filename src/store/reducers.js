@@ -1,5 +1,4 @@
 import { GET_REMINDERS, ADD_REMINDER } from './actionTypes';
-import moment from 'moment';
 
 const DEFAULT_STATE = [
   {
@@ -33,14 +32,24 @@ const DEFAULT_STATE = [
 
 export default (state = DEFAULT_STATE, action) => {
   switch (action.type) {
-    case GET_REMINDERS:
-      return DEFAULT_STATE.filter(
-        r =>
-          moment(r.date).month() === action.month &&
-          moment(r.date).year() === action.year
-      );
     case ADD_REMINDER:
-      return [...DEFAULT_STATE, action.reminder];
+      // search store for existing date object
+      const dateCollection = state.filter(r => r.date === action.activeDate);
+
+      // create new date object if doesn't exist
+      if (!dateCollection.length) {
+        return [
+          ...state,
+          { date: action.activeDate, items: [action.reminder] }
+        ];
+      } else {
+        // otherwise, push to existing date object's items array
+        return state.map(obj => {
+          if (obj.date === action.activeDate) obj.items.push(action.reminder);
+          return obj;
+        });
+      }
+    case GET_REMINDERS:
     default:
       return state;
   }

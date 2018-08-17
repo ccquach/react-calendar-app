@@ -7,6 +7,7 @@ import Header from './Header';
 import Month from './Month';
 import ReminderForm from './ReminderForm';
 import { getReminders, addReminder } from '../store/actions';
+import { getFilteredReminders } from '../utils/getFilteredReminders';
 
 const Container = styled.main`
   min-width: 80rem;
@@ -20,12 +21,12 @@ class App extends Component {
   state = {
     month: moment().month(),
     year: moment().year(),
-    isOpen: false
+    isOpen: false,
+    activeDate: ''
   };
 
   componentDidMount = () => {
-    const { month, year } = this.state;
-    this.props.getReminders(month, year);
+    this.props.getReminders();
   };
 
   handleMonthChange = direction => {
@@ -47,15 +48,19 @@ class App extends Component {
     }
 
     // update state
-    this.setState(newState, () =>
-      this.props.getReminders(this.state.month, this.state.year)
-    );
+    this.setState(newState, () => this.props.getReminders());
   };
 
-  toggleModal = () => {
+  toggleModal = activeDate => {
     this.setState({
-      isOpen: !this.state.isOpen
+      isOpen: !this.state.isOpen,
+      activeDate: !this.state.isOpen && activeDate ? activeDate : ''
     });
+  };
+
+  handleAdd = item => {
+    this.props.addReminder(item, this.state.activeDate);
+    this.props.getReminders();
   };
 
   render() {
@@ -71,20 +76,24 @@ class App extends Component {
         <Month
           month={month}
           year={year}
-          reminders={reminders}
+          reminders={getFilteredReminders(reminders, month, year)}
           toggleModal={this.toggleModal}
         />
-        <ReminderForm isOpen={isOpen} toggleModal={this.toggleModal} />
+        <ReminderForm
+          isOpen={isOpen}
+          toggleModal={this.toggleModal}
+          addReminder={this.handleAdd}
+        />
       </Container>
     );
   }
 }
 
-const mapStateToDispatch = state => ({
+const mapStateToProps = state => ({
   reminders: state
 });
 
 export default connect(
-  mapStateToDispatch,
+  mapStateToProps,
   { getReminders, addReminder }
 )(App);

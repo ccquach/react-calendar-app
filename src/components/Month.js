@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import moment from 'moment';
 import Week from './Week';
-import { getDaysInMonth } from '../helpers/getDaysInMonth';
+import { getDaysInMonth } from '../utils/getDaysInMonth';
 
 const Wrapper = styled.div`
   min-height: 60rem;

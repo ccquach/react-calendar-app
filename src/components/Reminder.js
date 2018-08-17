@@ -18,9 +18,14 @@ const formatTime = time => {
   const timeParts = time.split(':');
   const hour = +timeParts[0];
   const minute = timeParts[1];
-  const afternoon = hour > 12;
-  // debugger;
-  return `${afternoon ? hour - 12 : hour}:${minute}${afternoon ? 'pm' : 'am'}`;
+
+  // convert military to standard time
+  const isMidnight = hour === 0;
+  const isAfternoon = hour > 12;
+  const isNoon = hour === 12;
+  return `${isAfternoon ? +hour - 12 : isMidnight ? 12 : hour}:${minute}${
+    isAfternoon || isNoon ? 'pm' : 'am'
+  }`;
 };
 
 const Reminder = ({ reminder: { color, time, text } }) => {

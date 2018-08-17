@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import range from 'lodash.range';
 
+// #region styles
 const Background = styled.div`
   z-index: 100;
   position: fixed;
@@ -15,7 +16,7 @@ const Background = styled.div`
   transition: all 0.4s ease-out;
 `;
 
-const CloseButton = styled.button`
+const CloseButton = styled.a`
   position: absolute;
   top: 1rem;
   right: 1rem;
@@ -129,15 +130,18 @@ const SaveButton = styled.button`
     border-bottom: 1px solid rgb(19, 14, 72);
   }
 `;
+// #endregion
+
+const DEFAULT_STATE = {
+  hour: 12,
+  minute: '00',
+  meridiem: 'am',
+  text: '',
+  color: 'blue'
+};
 
 class ReminderForm extends Component {
-  state = {
-    hour: 11,
-    minute: '01',
-    meridiem: 'pm',
-    text: '',
-    color: 'blue'
-  };
+  state = DEFAULT_STATE;
 
   handleChange = e => {
     this.setState({
@@ -147,14 +151,41 @@ class ReminderForm extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
+    const { toggleModal, addReminder } = this.props;
+    const { hour, minute, meridiem, text, color } = this.state;
+
+    // save as military time for sorting
+    const isMidnight = meridiem === 'am' && hour === 12;
+    const isAfternoon = meridiem === 'pm' && hour < 12;
+    const isSingleDigit = hour < 10;
+    const time = `${
+      isMidnight
+        ? '00'
+        : isAfternoon
+          ? +hour + 12
+          : isSingleDigit
+            ? `0${hour}`
+            : hour
+    }:${minute}`;
+    // console.log(`Saved as: ${time}`);
+
+    // add new reminder
+    addReminder({
+      time,
+      text,
+      color
+    });
+    // reset and close form
+    this.setState(DEFAULT_STATE);
+    toggleModal();
   };
 
   render() {
     const { hour, minute, meridiem, text, color } = this.state;
     const { isOpen, toggleModal } = this.props;
     return (
-      <Background isOpen={isOpen}>
-        <Form onSubmit={this.handleSubmit}>
+      <Background isOpen={isOpen} onClick={toggleModal}>
+        <Form onSubmit={this.handleSubmit} onClick={e => e.stopPropagation()}>
           <CloseButton onClick={toggleModal}>&times;</CloseButton>
 
           {/* Text */}
@@ -168,7 +199,6 @@ class ReminderForm extends Component {
               onChange={this.handleChange}
               placeholder="Something to do"
               maxLength={30}
-              required
             />
           </InputGroup>
 
@@ -228,7 +258,8 @@ class ReminderForm extends Component {
 
 ReminderForm.propTypes = {
   isOpen: PropTypes.bool.isRequired,
-  toggleModal: PropTypes.func.isRequired
+  toggleModal: PropTypes.func.isRequired,
+  addReminder: PropTypes.func.isRequired
 };
 
 export default ReminderForm;
