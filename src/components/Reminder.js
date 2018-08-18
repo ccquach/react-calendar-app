@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
@@ -28,21 +28,32 @@ const formatTime = time => {
   }`;
 };
 
-const Reminder = ({ reminder: { color, time, text } }) => {
-  return (
-    <Wrapper color={color}>
-      <Time>{formatTime(time)}</Time>
-      <Text>{text}</Text>
-    </Wrapper>
-  );
-};
+class Reminder extends Component {
+  handleClick = () => {
+    this.props.setActiveReminder(this.props.reminder);
+    this.props.toggleModal();
+  };
+
+  render() {
+    const { reminder } = this.props;
+    const { color, time, text } = reminder;
+    return (
+      <Wrapper color={color} onClick={this.handleClick}>
+        <Time>{formatTime(time)}</Time>
+        <Text>{text}</Text>
+      </Wrapper>
+    );
+  }
+}
 
 Reminder.propTypes = {
   reminder: PropTypes.shape({
     time: PropTypes.string.isRequired,
     text: PropTypes.string.isRequired,
     color: PropTypes.string.isRequired
-  }).isRequired
+  }).isRequired,
+  toggleModal: PropTypes.func.isRequired,
+  setActiveReminder: PropTypes.func.isRequired
 };
 
 export default Reminder;

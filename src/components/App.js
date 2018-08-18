@@ -6,7 +6,7 @@ import moment from 'moment';
 import Header from './Header';
 import Month from './Month';
 import ReminderForm from './ReminderForm';
-import { getReminders, addReminder } from '../store/actions';
+import { getReminders, addReminder, updateReminder } from '../store/actions';
 import { getFilteredReminders } from '../utils/getFilteredReminders';
 
 const Container = styled.main`
@@ -22,7 +22,8 @@ class App extends Component {
     month: moment().month(),
     year: moment().year(),
     isOpen: false,
-    activeDate: ''
+    activeDate: '',
+    activeReminder: null
   };
 
   componentDidMount = () => {
@@ -59,13 +60,20 @@ class App extends Component {
   };
 
   handleAdd = item => {
-    this.props.addReminder(item, this.state.activeDate);
-    this.props.getReminders();
+    this.props.addReminder({ id: Date.now(), ...item }, this.state.activeDate);
+  };
+
+  handleUpdate = item => {
+    this.props.updateReminder(item, this.state.activeDate);
+  };
+
+  setActiveReminder = reminder => {
+    this.setState({ activeReminder: reminder });
   };
 
   render() {
     const { reminders } = this.props;
-    const { month, year, isOpen } = this.state;
+    const { month, year, isOpen, activeReminder } = this.state;
     return (
       <Container>
         <Header
@@ -78,12 +86,18 @@ class App extends Component {
           year={year}
           reminders={getFilteredReminders(reminders, month, year)}
           toggleModal={this.toggleModal}
+          setActiveReminder={this.setActiveReminder}
         />
-        <ReminderForm
-          isOpen={isOpen}
-          toggleModal={this.toggleModal}
-          addReminder={this.handleAdd}
-        />
+        {isOpen && (
+          <ReminderForm
+            isOpen={isOpen}
+            toggleModal={this.toggleModal}
+            addReminder={this.handleAdd}
+            updateReminder={this.handleUpdate}
+            reminder={activeReminder}
+            setActiveReminder={this.setActiveReminder}
+          />
+        )}
       </Container>
     );
   }
@@ -95,5 +109,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { getReminders, addReminder }
+  { getReminders, addReminder, updateReminder }
 )(App);

@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import moment from 'moment';
 import Week from './Week';
 import { getDaysInMonth } from '../utils/getDaysInMonth';
+import { getDaysOfWeek } from '../utils/getDaysOfWeek';
 
 const Wrapper = styled.div`
   min-height: 60rem;
@@ -11,16 +12,7 @@ const Wrapper = styled.div`
   flex-direction: column;
 `;
 
-const getDaysOfWeek = (days, firstWeek, i) =>
-  days.filter(
-    day =>
-      moment(day)
-        .startOf('week')
-        .isoWeek() ===
-      firstWeek + i
-  );
-
-const Month = ({ month, year, reminders, toggleModal }) => {
+const Month = ({ month, year, reminders, toggleModal, setActiveReminder }) => {
   // get array of days for the month
   const days = getDaysInMonth(month, year);
   // get week index of first week of the month
@@ -65,6 +57,7 @@ const Month = ({ month, year, reminders, toggleModal }) => {
           index={firstWeek + i}
           days={data}
           toggleModal={toggleModal}
+          setActiveReminder={setActiveReminder}
         />
       );
       // restart firstWeek at 1 if previous value is 52
@@ -91,7 +84,8 @@ Month.propTypes = {
       ).isRequired
     }).isRequired
   ).isRequired,
-  toggleModal: PropTypes.func.isRequired
+  toggleModal: PropTypes.func.isRequired,
+  setActiveReminder: PropTypes.func.isRequired
 };
 
 export default Month;

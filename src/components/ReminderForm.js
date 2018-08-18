@@ -143,15 +143,38 @@ const DEFAULT_STATE = {
 class ReminderForm extends Component {
   state = DEFAULT_STATE;
 
+  componentDidMount = () => {
+    // on update, autocomplete form with selected reminder
+    if (this.props.reminder) {
+      const { text, time, color } = this.props.reminder;
+      const timeParts = time.split(':');
+      const hour = +timeParts[0];
+      const minute = timeParts[1];
+      this.setState({
+        text,
+        color,
+        hour: hour > 12 ? hour - 12 : hour === 0 ? hour + 12 : hour,
+        minute,
+        meridiem: hour >= 12 ? 'pm' : 'am'
+      });
+    }
+  };
+
   handleChange = e => {
     this.setState({
       [e.target.name]: e.target.value
     });
   };
 
+  handleClose = () => {
+    // clear active reminder state so form not autocompleted on next mount
+    this.props.setActiveReminder(null);
+    this.props.toggleModal();
+  };
+
   handleSubmit = e => {
     e.preventDefault();
-    const { toggleModal, addReminder } = this.props;
+    const { addReminder, reminder, updateReminder } = this.props;
     const { hour, minute, meridiem, text, color } = this.state;
 
     // save as military time for sorting
@@ -169,24 +192,22 @@ class ReminderForm extends Component {
     }:${minute}`;
     // console.log(`Saved as: ${time}`);
 
-    // add new reminder
-    addReminder({
-      time,
-      text,
-      color
-    });
+    // add or update new reminder
+    reminder
+      ? updateReminder({ id: reminder.id, time, text, color })
+      : addReminder({ time, text, color });
     // reset and close form
     this.setState(DEFAULT_STATE);
-    toggleModal();
+    this.handleClose();
   };
 
   render() {
     const { hour, minute, meridiem, text, color } = this.state;
-    const { isOpen, toggleModal } = this.props;
+    const { isOpen } = this.props;
     return (
-      <Background isOpen={isOpen} onClick={toggleModal}>
+      <Background isOpen={isOpen} onClick={this.handleClose}>
         <Form onSubmit={this.handleSubmit} onClick={e => e.stopPropagation()}>
-          <CloseButton onClick={toggleModal}>&times;</CloseButton>
+          <CloseButton onClick={this.handleClose}>&times;</CloseButton>
 
           {/* Text */}
           <InputGroup>
@@ -259,7 +280,14 @@ class ReminderForm extends Component {
 ReminderForm.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   toggleModal: PropTypes.func.isRequired,
-  addReminder: PropTypes.func.isRequired
+  addReminder: PropTypes.func.isRequired,
+  updateReminder: PropTypes.func.isRequired,
+  reminder: PropTypes.shape({
+    time: PropTypes.string.isRequired,
+    text: PropTypes.string.isRequired,
+    color: PropTypes.string.isRequired
+  }),
+  setActiveReminder: PropTypes.func.isRequired
 };
 
 export default ReminderForm;

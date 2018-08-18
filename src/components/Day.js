@@ -49,7 +49,7 @@ const AddButton = styled.button`
   transition: opacity 0.3s ease-out;
 `;
 
-const Day = ({ date, reminders, toggleModal }) => {
+const Day = ({ date, reminders, toggleModal, setActiveReminder }) => {
   const sortedReminders =
     reminders && !!reminders.length ? sortReminders(reminders) : null;
 
@@ -59,8 +59,13 @@ const Day = ({ date, reminders, toggleModal }) => {
       {date ? <Display format="D">{date}</Display> : <span>&nbsp;</span>}
       <Reminders>
         {sortedReminders ? (
-          sortedReminders.map((r, i) => (
-            <Reminder key={`${r}-${i}`} reminder={r} />
+          sortedReminders.map(r => (
+            <Reminder
+              key={r.id}
+              reminder={r}
+              toggleModal={() => toggleModal(date)}
+              setActiveReminder={setActiveReminder}
+            />
           ))
         ) : (
           <span>&nbsp;</span>
@@ -79,7 +84,8 @@ Day.propTypes = {
       color: PropTypes.string.isRequired
     })
   ),
-  toggleModal: PropTypes.func.isRequired
+  toggleModal: PropTypes.func.isRequired,
+  setActiveReminder: PropTypes.func.isRequired
 };
 
 export default Day;
