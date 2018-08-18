@@ -1,4 +1,9 @@
-import { GET_REMINDERS, ADD_REMINDER, UPDATE_REMINDER } from './actionTypes';
+import {
+  GET_REMINDERS,
+  ADD_REMINDER,
+  UPDATE_REMINDER,
+  DELETE_REMINDER
+} from './actionTypes';
 
 const DEFAULT_STATE = [
   {
@@ -58,6 +63,11 @@ export default (state = DEFAULT_STATE, action) => {
           return { ...obj, items: newItems };
         }
         return obj;
+      });
+    case DELETE_REMINDER:
+      return state.map(obj => {
+        const newItems = obj.items.filter(item => item.id !== action.id);
+        return { ...obj, items: newItems };
       });
     case GET_REMINDERS:
     default:

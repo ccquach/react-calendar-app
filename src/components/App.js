@@ -6,7 +6,12 @@ import moment from 'moment';
 import Header from './Header';
 import Month from './Month';
 import ReminderForm from './ReminderForm';
-import { getReminders, addReminder, updateReminder } from '../store/actions';
+import {
+  getReminders,
+  addReminder,
+  updateReminder,
+  deleteReminder
+} from '../store/actions';
 import { getFilteredReminders } from '../utils/getFilteredReminders';
 
 const Container = styled.main`
@@ -72,7 +77,7 @@ class App extends Component {
   };
 
   render() {
-    const { reminders } = this.props;
+    const { reminders, deleteReminder } = this.props;
     const { month, year, isOpen, activeReminder } = this.state;
     return (
       <Container>
@@ -96,6 +101,7 @@ class App extends Component {
             updateReminder={this.handleUpdate}
             reminder={activeReminder}
             setActiveReminder={this.setActiveReminder}
+            deleteReminder={deleteReminder}
           />
         )}
       </Container>
@@ -109,5 +115,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { getReminders, addReminder, updateReminder }
+  { getReminders, addReminder, updateReminder, deleteReminder }
 )(App);

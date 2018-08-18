@@ -121,7 +121,8 @@ const SaveButton = styled.button`
   letter-spacing: 1px;
   transition: all 0.3s ease-out;
 
-  &:hover {
+  &:hover,
+  &:focus {
     background-color: rgba(27, 20, 100, 0.8);
     border-bottom: 2px solid rgb(19, 14, 72);
   }
@@ -130,6 +131,35 @@ const SaveButton = styled.button`
     border-bottom: 1px solid rgb(19, 14, 72);
   }
 `;
+
+const DeleteButton = styled.button.attrs({
+  type: 'button'
+})`
+  float: right;
+  display: inline-block;
+  color: #ecf0f1;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  padding: 0.7rem 1.5rem;
+  background-color: rgba(231, 76, 60, 0.5);
+  border: none;
+  border-bottom: 2px solid rgba(192, 57, 43, 0.5);
+  border-radius: 3px;
+  transition: all 0.3s ease-out;
+
+  &:hover,
+  &:focus {
+    background-color: rgba(231, 76, 60, 0.8);
+    border-bottom: 2px solid rgb(192, 57, 43);
+  }
+
+  &:active {
+    border-bottom: 1px solid rgb(192, 57, 43);
+  }
+`;
+
 // #endregion
 
 const DEFAULT_STATE = {
@@ -172,6 +202,11 @@ class ReminderForm extends Component {
     this.props.toggleModal();
   };
 
+  handleDelete = () => {
+    this.props.deleteReminder(this.props.reminder.id);
+    this.handleClose();
+  };
+
   handleSubmit = e => {
     e.preventDefault();
     const { addReminder, reminder, updateReminder } = this.props;
@@ -203,7 +238,7 @@ class ReminderForm extends Component {
 
   render() {
     const { hour, minute, meridiem, text, color } = this.state;
-    const { isOpen } = this.props;
+    const { isOpen, reminder } = this.props;
     return (
       <Background isOpen={isOpen} onClick={this.handleClose}>
         <Form onSubmit={this.handleSubmit} onClick={e => e.stopPropagation()}>
@@ -271,6 +306,9 @@ class ReminderForm extends Component {
           </InputGroup>
 
           <SaveButton type="submit">Save</SaveButton>
+          {reminder && (
+            <DeleteButton onClick={this.handleDelete}>Delete</DeleteButton>
+          )}
         </Form>
       </Background>
     );
@@ -287,7 +325,8 @@ ReminderForm.propTypes = {
     text: PropTypes.string.isRequired,
     color: PropTypes.string.isRequired
   }),
-  setActiveReminder: PropTypes.func.isRequired
+  setActiveReminder: PropTypes.func.isRequired,
+  deleteReminder: PropTypes.func.isRequired
 };
 
 export default ReminderForm;
