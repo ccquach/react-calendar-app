@@ -12,6 +12,22 @@ const Wrapper = styled.div`
   flex-direction: column;
 `;
 
+const Header = styled.ul`
+  list-style: none;
+  width: 100%;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 1.2rem;
+  color: #ecf0f1;
+  margin-bottom: 1rem;
+`;
+
+const Day = styled.li`
+  display: inline-block;
+  width: 14.28%;
+`;
+
 const Month = ({ month, year, reminders, toggleForm, toggleList }) => {
   // get array of days for the month
   const days = getDaysInMonth(month, year);
@@ -65,8 +81,20 @@ const Month = ({ month, year, reminders, toggleForm, toggleList }) => {
     }
   }
 
+  // days of the week
+  const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat'];
+
   // render Week components
-  return <Wrapper>{weeks}</Wrapper>;
+  return (
+    <Wrapper>
+      <Header>
+        {daysOfWeek.map(day => (
+          <Day key="day">{day}</Day>
+        ))}
+      </Header>
+      {weeks}
+    </Wrapper>
+  );
 };
 
 Month.propTypes = {
