@@ -9,29 +9,36 @@ const DEFAULT_STATE = [
   {
     date: '2018-08-20',
     items: [
-      { id: 1, time: '11:00', text: 'Bio Final', color: 'red' },
-      { id: 2, time: '08:00', text: 'Calc final', color: 'red' }
+      { id: 1, time: '11:00', text: 'Bio Final', color: 'Crimson' },
+      { id: 2, time: '08:00', text: 'Calc final', color: 'Crimson' }
     ]
   },
   {
     date: '2018-08-05',
     items: [
-      { id: 3, time: '16:00', text: 'Lunch with Dan', color: 'blue' },
-      { id: 4, time: '11:00', text: 'Gym session', color: 'red' },
-      { id: 5, time: '14:00', text: "Bob's birthday party", color: 'purple' }
+      { id: 3, time: '16:00', text: 'Lunch with Dan', color: 'DodgerBlue' },
+      { id: 4, time: '11:00', text: 'Gym session', color: 'Crimson' },
+      {
+        id: 5,
+        time: '14:00',
+        text: "Bob's birthday party",
+        color: 'BlueViolet'
+      }
     ]
   },
   {
     date: '2017-08-10',
-    items: [{ id: 6, time: '13:00', text: 'Marathon', color: 'orange' }]
+    items: [{ id: 6, time: '13:00', text: 'Marathon', color: 'DarkOrange' }]
   },
   {
     date: '2018-07-29',
-    items: [{ id: 7, time: '18:00', text: 'Family dinner', color: 'green' }]
+    items: [
+      { id: 7, time: '18:00', text: 'Family dinner', color: 'ForestGreen' }
+    ]
   },
   {
     date: '2018-06-04',
-    items: [{ id: 8, time: '20:00', text: 'Game night', color: 'blue' }]
+    items: [{ id: 8, time: '20:00', text: 'Game night', color: 'DodgerBlue' }]
   }
 ];
 

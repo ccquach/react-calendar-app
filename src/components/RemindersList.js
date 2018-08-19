@@ -2,13 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import Moment from 'react-moment';
+import Modal from './Modal';
 import Reminder from './Reminder';
 import styles from '../styles/modal';
-
-const Wrapper = styled.div`
-  ${styles.wrapper};
-  z-index: 100;
-`;
 
 const Heading = styled.h2`
   ${styles.heading};
@@ -29,15 +25,9 @@ const CloseButton = styled.a`
   ${styles.closeButton};
 `;
 
-const RemindersList = ({
-  isOpen,
-  reminders,
-  toggleForm,
-  toggleList,
-  activeDate
-}) => {
+const RemindersList = ({ reminders, toggleForm, toggleList, activeDate }) => {
   return (
-    <Wrapper isOpen={isOpen} onClick={toggleList}>
+    <Modal z={100} onClick={toggleList}>
       <List onClick={e => e.stopPropagation()}>
         <Heading>
           <Moment format="MMM. D, YYYY">{activeDate}</Moment>
@@ -53,12 +43,11 @@ const RemindersList = ({
           </Item>
         ))}
       </List>
-    </Wrapper>
+    </Modal>
   );
 };
 
 RemindersList.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
   reminders: PropTypes.arrayOf(
     PropTypes.shape({
       time: PropTypes.string.isRequired,

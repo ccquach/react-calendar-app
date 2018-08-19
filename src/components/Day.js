@@ -7,9 +7,11 @@ import { sortReminders } from '../utils/sortReminders';
 
 // #region styles
 const Wrapper = styled.div`
+  font-size: 1.1rem;
   flex: 1;
+  border-radius: 3px;
   background-color: ${props =>
-    props.nodate ? 'rgba(27, 20, 100, .2)' : '#fff'};
+    props.nodate ? 'rgba(27, 20, 100, .2)' : '#ecf0f1'};
   margin: 2px;
   position: relative;
 
@@ -22,7 +24,7 @@ const Display = styled(Moment)`
   position: absolute;
   top: 0.7rem;
   left: 0.7rem;
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   position: relative;
 `;
 
@@ -72,19 +74,17 @@ const Day = ({ date, reminders, toggleForm, toggleList }) => {
       )}
       {date ? <Display format="D">{date}</Display> : <span>&nbsp;</span>}
       <Reminders>
-        {sortedReminders ? (
-          sortedReminders
-            .map(r => (
-              <Reminder
-                key={r.id}
-                reminder={r}
-                toggleForm={toggleForm.bind(this, date, r)}
-              />
-            ))
-            .slice(0, 2)
-        ) : (
-          <span>&nbsp;</span>
-        )}
+        {sortedReminders
+          ? sortedReminders
+              .map(r => (
+                <Reminder
+                  key={r.id}
+                  reminder={r}
+                  toggleForm={toggleForm.bind(this, date, r)}
+                />
+              ))
+              .slice(0, 2)
+          : null}
         {sortedReminders &&
           sortedReminders.length > 2 && (
             <MoreReminders

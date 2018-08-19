@@ -6,7 +6,7 @@ import Day from './Day';
 
 const Wrapper = styled.div`
   flex: 1;
-  min-height: 20vh;
+  min-height: 14.5rem;
   width: 100%;
   display: flex;
 `;

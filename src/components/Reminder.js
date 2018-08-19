@@ -3,8 +3,12 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
+  cursor: pointer;
+  font-size: 1.1rem;
   background-color: ${props => props.color};
   color: #ecf0f1;
+  border-radius: 3px;
+  padding: 4px;
   margin-bottom: 1px;
   ${props => (props.padding ? `padding: ${props.padding}rem` : null)};
 `;

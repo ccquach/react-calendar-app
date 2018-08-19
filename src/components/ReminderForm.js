@@ -4,13 +4,9 @@ import styled, { css } from 'styled-components';
 import range from 'lodash.range';
 import Moment from 'react-moment';
 import styles from '../styles/modal';
+import Modal from './Modal';
 
 // #region styles
-const Background = styled.div`
-  ${styles.wrapper};
-  z-index: 200;
-`;
-
 const Heading = styled.h2`
   ${styles.heading};
 `;
@@ -40,7 +36,7 @@ const Label = styled.label`
 const inputFieldStyles = css`
   font-family: inherit;
   width: 100%;
-  padding: 0.7rem 1rem;
+  padding: 0.8rem;
   border-radius: 3px;
   border: none;
   border-bottom: 2px solid transparent;
@@ -77,68 +73,67 @@ const Time = styled.div`
 
 const Hour = styled.select`
   ${inputFieldStyles};
-  width 30%;
+  width 29%;
 `;
 
 const Minute = styled.select`
   ${inputFieldStyles};
-  width 30%;
+  width 29%;
 `;
 
 const Meridiem = styled.select`
   ${inputFieldStyles};
-  width 30%;
+  width 32%;
 `;
 
 const SaveButton = styled.button`
-  font-size: inherit;
+  color: #34495e;
+  font-family: inherit;
+  background-color: #feca57;
   border: none;
-  border-bottom: 2px solid rgba(19, 14, 72, 0.5);
+  border-bottom: 2px solid #ff9f43;
   border-radius: 3px;
   padding: 0.7rem 1.5rem;
-  background-color: rgba(27, 20, 100, 0.5);
-  color: #ecf0f1;
   cursor: pointer;
   text-transform: uppercase;
-  letter-spacing: 1px;
   transition: all 0.3s ease-out;
 
   &:hover,
   &:focus {
-    background-color: rgba(27, 20, 100, 0.8);
-    border-bottom: 2px solid rgb(19, 14, 72);
+    background-color: #ffc312;
+    border-bottom: 2px solid #f79f1f;
   }
 
   &:active {
-    border-bottom: 1px solid rgb(19, 14, 72);
+    border-bottom: 1px solid #f79f1f;
   }
 `;
 
 const DeleteButton = styled.button.attrs({
   type: 'button'
 })`
+  color: #34495e;
+  font-family: inherit;
   float: right;
   display: inline-block;
-  color: #ecf0f1;
   text-decoration: none;
   text-transform: uppercase;
-  letter-spacing: 1px;
   cursor: pointer;
   padding: 0.7rem 1.5rem;
-  background-color: rgba(231, 76, 60, 0.5);
+  background-color: #ff6b6b;
   border: none;
-  border-bottom: 2px solid rgba(192, 57, 43, 0.5);
+  border-bottom: 2px solid #ee5253;
   border-radius: 3px;
   transition: all 0.3s ease-out;
 
   &:hover,
   &:focus {
-    background-color: rgba(231, 76, 60, 0.8);
-    border-bottom: 2px solid rgb(192, 57, 43);
+    background-color: #e74c3c;
+    border-bottom: 2px solid #c0392b;
   }
 
   &:active {
-    border-bottom: 1px solid rgb(192, 57, 43);
+    border-bottom: 1px solid #c0392b;
   }
 `;
 
@@ -149,7 +144,7 @@ const DEFAULT_STATE = {
   minute: '00',
   meridiem: 'am',
   text: '',
-  color: 'blue'
+  color: 'DodgerBlue'
 };
 
 class ReminderForm extends Component {
@@ -219,10 +214,18 @@ class ReminderForm extends Component {
 
   render() {
     const { hour, minute, meridiem, text, color } = this.state;
-    const { isOpen, reminder, activeDate } = this.props;
+    const { reminder, activeDate } = this.props;
+
+    const colors = [
+      'DodgerBlue',
+      'BlueViolet',
+      'Crimson',
+      'DarkOrange',
+      'ForestGreen'
+    ];
 
     return (
-      <Background isOpen={isOpen} onClick={this.handleClose}>
+      <Modal z={200} onClick={this.handleClose}>
         <Form onSubmit={this.handleSubmit} onClick={e => e.stopPropagation()}>
           <Heading>
             <Moment format="MMM. D, YYYY">{activeDate}</Moment>
@@ -281,11 +284,11 @@ class ReminderForm extends Component {
               onChange={this.handleChange}
               value={color}
             >
-              <option value="blue">Blue</option>
-              <option value="purple">Purple</option>
-              <option value="red">Red</option>
-              <option value="orange">Orange</option>
-              <option value="green">Green</option>
+              {colors.map(color => (
+                <option key={color} value={color}>
+                  {color}
+                </option>
+              ))}
             </Select>
             <Color bg={color} />
           </InputGroup>
@@ -295,13 +298,12 @@ class ReminderForm extends Component {
             <DeleteButton onClick={this.handleDelete}>Delete</DeleteButton>
           )}
         </Form>
-      </Background>
+      </Modal>
     );
   }
 }
 
 ReminderForm.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
   toggleForm: PropTypes.func.isRequired,
   addReminder: PropTypes.func.isRequired,
   updateReminder: PropTypes.func.isRequired,

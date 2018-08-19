@@ -18,6 +18,7 @@ const months = [
 ];
 
 const Wrapper = styled.header`
+  color: #ecf0f1;
   text-align: center;
   margin-bottom: 3rem;
   display: flex;

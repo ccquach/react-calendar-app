@@ -21,7 +21,7 @@ const Container = styled.main`
   min-width: 80rem;
   max-width: 114rem;
   width: 80%;
-  margin: 0 auto;
+  margin: 10vh auto;
   padding: 3rem;
 `;
 
@@ -93,7 +93,6 @@ class App extends Component {
         />
         {form.isOpen && (
           <ReminderForm
-            isOpen={form.isOpen}
             toggleForm={toggleForm}
             addReminder={this.handleAdd}
             updateReminder={this.handleUpdate}
@@ -104,7 +103,6 @@ class App extends Component {
         )}
         {list.isOpen && (
           <RemindersList
-            isOpen={list.isOpen}
             reminders={getRemindersList(reminders, activeDate)}
             toggleForm={toggleForm}
             toggleList={() => toggleList(null)}
