@@ -13,6 +13,7 @@ const Heading = styled.h2`
 const List = styled.ul`
   ${styles.container};
   list-style: none;
+  width: auto;
 `;
 
 const Item = styled.li`
@@ -38,7 +39,8 @@ const RemindersList = ({ reminders, toggleForm, toggleList, activeDate }) => {
             <Reminder
               reminder={r}
               toggleForm={toggleForm.bind(this, activeDate, r)}
-              padding={1}
+              padding={1.25}
+              fontSize={1.3}
             />
           </Item>
         ))}

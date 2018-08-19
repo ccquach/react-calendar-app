@@ -17,7 +17,7 @@ export default {
     cursor: pointer;
   `,
   container: css`
-    font-size: 1.2rem;
+    font-size: 1.3rem;
     z-index: 200;
     width: 30rem;
     border-radius: 3px;

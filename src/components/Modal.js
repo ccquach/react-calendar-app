@@ -22,13 +22,12 @@ const getStyles = () => ({
   scale: spring(1, presets.gentle)
 });
 
-const ZoomIn = ({ children, z, onClick }) => {
+const ZoomIn = ({ children, ...props }) => {
   return (
     <Motion defaultStyle={getDefaultStyles()} style={getStyles()}>
       {style => (
         <Wrapper
-          z={z}
-          onClick={onClick}
+          {...props}
           style={{
             opacity: style.opacity,
             transform: `scale(${style.scale})`

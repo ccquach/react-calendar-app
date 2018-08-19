@@ -79,7 +79,7 @@ const Day = ({ date, reminders, toggleForm, toggleList }) => {
               .map(r => (
                 <Reminder
                   key={r.id}
-                  reminder={r}
+                  {...r}
                   toggleForm={toggleForm.bind(this, date, r)}
                 />
               ))
