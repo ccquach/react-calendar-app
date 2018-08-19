@@ -89,7 +89,7 @@ const Month = ({ month, year, reminders, toggleForm, toggleList }) => {
     <Wrapper>
       <Header>
         {daysOfWeek.map(day => (
-          <Day key="day">{day}</Day>
+          <Day key={day}>{day}</Day>
         ))}
       </Header>
       {weeks}
