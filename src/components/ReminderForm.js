@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import styled, { css } from 'styled-components';
 import range from 'lodash.range';
 import Moment from 'react-moment';
+import moment from 'moment';
 import styles from '../styles/modal';
 import Modal from './Modal';
 
@@ -140,7 +141,7 @@ const DeleteButton = styled.button.attrs({
 // #endregion
 
 const DEFAULT_STATE = {
-  hour: 12,
+  hour: '12',
   minute: '00',
   meridiem: 'am',
   text: '',
@@ -154,15 +155,12 @@ class ReminderForm extends Component {
     // on update, autocomplete form with selected reminder
     if (this.props.reminder) {
       const { text, time, color } = this.props.reminder;
-      const timeParts = time.split(':');
-      const hour = +timeParts[0];
-      const minute = timeParts[1];
       this.setState({
         text,
         color,
-        hour: hour > 12 ? hour - 12 : hour === 0 ? hour + 12 : hour,
-        minute,
-        meridiem: hour >= 12 ? 'pm' : 'am'
+        hour: moment(time, 'HH:mm').format('h'),
+        minute: moment(time, 'HH:mm').format('mm'),
+        meridiem: moment(time, 'HH:mm').format('a')
       });
     }
   };
@@ -189,24 +187,14 @@ class ReminderForm extends Component {
     const { hour, minute, meridiem, text, color } = this.state;
 
     // save as military time for sorting
-    const isMidnight = meridiem === 'am' && hour === 12;
-    const isAfternoon = meridiem === 'pm' && hour < 12;
-    const isSingleDigit = hour < 10;
-    const time = `${
-      isMidnight
-        ? '00'
-        : isAfternoon
-          ? +hour + 12
-          : isSingleDigit
-            ? `0${hour}`
-            : hour
-    }:${minute}`;
-    // console.log(`Saved as: ${time}`);
+    const time = `${hour}:${minute + meridiem}`;
+    const militaryTime = moment(time, 'h:mma').format('HH:mm');
+    // console.log(`Saved as: ${militaryTime}`);
 
     // add or update new reminder
     reminder
-      ? updateReminder({ id: reminder.id, time, text, color })
-      : addReminder({ time, text, color });
+      ? updateReminder({ id: reminder.id, time: militaryTime, text, color })
+      : addReminder({ time: militaryTime, text, color });
     // reset and close form
     this.setState(DEFAULT_STATE);
     this.handleClose();
