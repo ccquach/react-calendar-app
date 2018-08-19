@@ -6,6 +6,7 @@ const Wrapper = styled.div`
   background-color: ${props => props.color};
   color: #ecf0f1;
   margin-bottom: 1px;
+  ${props => (props.padding ? `padding: ${props.padding}rem` : null)};
 `;
 
 const Time = styled.span`
@@ -29,16 +30,11 @@ const formatTime = time => {
 };
 
 class Reminder extends Component {
-  handleClick = () => {
-    this.props.setActiveReminder(this.props.reminder);
-    this.props.toggleModal();
-  };
-
   render() {
-    const { reminder } = this.props;
+    const { reminder, padding, toggleForm } = this.props;
     const { color, time, text } = reminder;
     return (
-      <Wrapper color={color} onClick={this.handleClick}>
+      <Wrapper color={color} onClick={toggleForm} padding={padding}>
         <Time>{formatTime(time)}</Time>
         <Text>{text}</Text>
       </Wrapper>
@@ -52,8 +48,8 @@ Reminder.propTypes = {
     text: PropTypes.string.isRequired,
     color: PropTypes.string.isRequired
   }).isRequired,
-  toggleModal: PropTypes.func.isRequired,
-  setActiveReminder: PropTypes.func.isRequired
+  toggleForm: PropTypes.func.isRequired,
+  padding: PropTypes.number
 };
 
 export default Reminder;

@@ -6,13 +6,16 @@ import moment from 'moment';
 import Header from './Header';
 import Month from './Month';
 import ReminderForm from './ReminderForm';
+import RemindersList from './RemindersList';
 import {
   getReminders,
   addReminder,
   updateReminder,
   deleteReminder
-} from '../store/actions';
+} from '../store/actions/reminders';
+import { toggleForm, toggleList } from '../store/actions/modals';
 import { getFilteredReminders } from '../utils/getFilteredReminders';
+import { getRemindersList } from '../utils/getRemindersList';
 
 const Container = styled.main`
   min-width: 80rem;
@@ -25,10 +28,7 @@ const Container = styled.main`
 class App extends Component {
   state = {
     month: moment().month(),
-    year: moment().year(),
-    isOpen: false,
-    activeDate: '',
-    activeReminder: null
+    year: moment().year()
   };
 
   componentDidMount = () => {
@@ -57,28 +57,26 @@ class App extends Component {
     this.setState(newState, () => this.props.getReminders());
   };
 
-  toggleModal = activeDate => {
-    this.setState({
-      isOpen: !this.state.isOpen,
-      activeDate: !this.state.isOpen && activeDate ? activeDate : ''
-    });
-  };
-
   handleAdd = item => {
-    this.props.addReminder({ id: Date.now(), ...item }, this.state.activeDate);
+    this.props.addReminder({ id: Date.now(), ...item }, this.props.activeDate);
   };
 
   handleUpdate = item => {
-    this.props.updateReminder(item, this.state.activeDate);
-  };
-
-  setActiveReminder = reminder => {
-    this.setState({ activeReminder: reminder });
+    this.props.updateReminder(item, this.props.activeDate);
   };
 
   render() {
-    const { reminders, deleteReminder } = this.props;
-    const { month, year, isOpen, activeReminder } = this.state;
+    const {
+      reminders,
+      deleteReminder,
+      form,
+      list,
+      activeDate,
+      toggleForm,
+      toggleList
+    } = this.props;
+    const { month, year } = this.state;
+
     return (
       <Container>
         <Header
@@ -90,18 +88,27 @@ class App extends Component {
           month={month}
           year={year}
           reminders={getFilteredReminders(reminders, month, year)}
-          toggleModal={this.toggleModal}
-          setActiveReminder={this.setActiveReminder}
+          toggleForm={toggleForm}
+          toggleList={toggleList}
         />
-        {isOpen && (
+        {form.isOpen && (
           <ReminderForm
-            isOpen={isOpen}
-            toggleModal={this.toggleModal}
+            isOpen={form.isOpen}
+            toggleForm={toggleForm}
             addReminder={this.handleAdd}
             updateReminder={this.handleUpdate}
-            reminder={activeReminder}
-            setActiveReminder={this.setActiveReminder}
+            reminder={form.reminder}
             deleteReminder={deleteReminder}
+            activeDate={activeDate}
+          />
+        )}
+        {list.isOpen && (
+          <RemindersList
+            isOpen={list.isOpen}
+            reminders={getRemindersList(reminders, activeDate)}
+            toggleForm={toggleForm}
+            toggleList={() => toggleList(null)}
+            activeDate={activeDate}
           />
         )}
       </Container>
@@ -110,10 +117,20 @@ class App extends Component {
 }
 
 const mapStateToProps = state => ({
-  reminders: state
+  reminders: state.reminders,
+  form: state.modals.form,
+  list: state.modals.list,
+  activeDate: state.modals.activeDate
 });
 
 export default connect(
   mapStateToProps,
-  { getReminders, addReminder, updateReminder, deleteReminder }
+  {
+    getReminders,
+    addReminder,
+    updateReminder,
+    deleteReminder,
+    toggleForm,
+    toggleList
+  }
 )(App);

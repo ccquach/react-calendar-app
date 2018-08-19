@@ -3,7 +3,7 @@ import {
   ADD_REMINDER,
   UPDATE_REMINDER,
   DELETE_REMINDER
-} from './actionTypes';
+} from '../actionTypes';
 
 const DEFAULT_STATE = [
   {

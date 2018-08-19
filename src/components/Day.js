@@ -5,6 +5,7 @@ import Moment from 'react-moment';
 import Reminder from './Reminder';
 import { sortReminders } from '../utils/sortReminders';
 
+// #region styles
 const Wrapper = styled.div`
   flex: 1;
   background-color: ${props =>
@@ -49,27 +50,47 @@ const AddButton = styled.button`
   transition: opacity 0.3s ease-out;
 `;
 
-const Day = ({ date, reminders, toggleModal, setActiveReminder }) => {
+const MoreReminders = styled.a`
+  text-decoration: none;
+  display: block;
+  text-align: center;
+  padding: 0.5rem 0.7rem;
+  background-color: #ecf0f1;
+  margin-top: 2px;
+  cursor: pointer;
+`;
+// #endregion
+
+const Day = ({ date, reminders, toggleForm, toggleList }) => {
   const sortedReminders =
     reminders && !!reminders.length ? sortReminders(reminders) : null;
 
   return (
     <Wrapper nodate={date ? false : true}>
-      {date && <AddButton onClick={() => toggleModal(date)}>&#43;</AddButton>}
+      {date && (
+        <AddButton onClick={toggleForm.bind(this, date, {})}>&#43;</AddButton>
+      )}
       {date ? <Display format="D">{date}</Display> : <span>&nbsp;</span>}
       <Reminders>
         {sortedReminders ? (
-          sortedReminders.map(r => (
-            <Reminder
-              key={r.id}
-              reminder={r}
-              toggleModal={() => toggleModal(date)}
-              setActiveReminder={setActiveReminder}
-            />
-          ))
+          sortedReminders
+            .map(r => (
+              <Reminder
+                key={r.id}
+                reminder={r}
+                toggleForm={toggleForm.bind(this, date, r)}
+              />
+            ))
+            .slice(0, 2)
         ) : (
           <span>&nbsp;</span>
         )}
+        {sortedReminders &&
+          sortedReminders.length > 2 && (
+            <MoreReminders
+              onClick={toggleList.bind(this, date)}
+            >{`+${sortedReminders.length - 2} more`}</MoreReminders>
+          )}
       </Reminders>
     </Wrapper>
   );
@@ -84,8 +105,8 @@ Day.propTypes = {
       color: PropTypes.string.isRequired
     })
   ),
-  toggleModal: PropTypes.func.isRequired,
-  setActiveReminder: PropTypes.func.isRequired
+  toggleForm: PropTypes.func.isRequired,
+  toggleList: PropTypes.func.isRequired
 };
 
 export default Day;

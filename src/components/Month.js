@@ -12,7 +12,7 @@ const Wrapper = styled.div`
   flex-direction: column;
 `;
 
-const Month = ({ month, year, reminders, toggleModal, setActiveReminder }) => {
+const Month = ({ month, year, reminders, toggleForm, toggleList }) => {
   // get array of days for the month
   const days = getDaysInMonth(month, year);
   // get week index of first week of the month
@@ -56,8 +56,8 @@ const Month = ({ month, year, reminders, toggleModal, setActiveReminder }) => {
           key={`week-${i}`}
           index={firstWeek + i}
           days={data}
-          toggleModal={toggleModal}
-          setActiveReminder={setActiveReminder}
+          toggleForm={toggleForm}
+          toggleList={toggleList}
         />
       );
       // restart firstWeek at 1 if previous value is 52
@@ -84,8 +84,8 @@ Month.propTypes = {
       ).isRequired
     }).isRequired
   ).isRequired,
-  toggleModal: PropTypes.func.isRequired,
-  setActiveReminder: PropTypes.func.isRequired
+  toggleForm: PropTypes.func.isRequired,
+  toggleList: PropTypes.func.isRequired
 };
 
 export default Month;

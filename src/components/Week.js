@@ -11,7 +11,7 @@ const Wrapper = styled.div`
   display: flex;
 `;
 
-const Week = ({ index, days, toggleModal, setActiveReminder }) => {
+const Week = ({ index, days, toggleForm, toggleList }) => {
   let daysList = [];
   let daysIdx = 0;
   // render seven Day components, mapping date to correct day of week
@@ -23,8 +23,8 @@ const Week = ({ index, days, toggleModal, setActiveReminder }) => {
         key={`week${index}-day${i}`}
         date={isMatching ? dayObj.date : null}
         reminders={isMatching ? dayObj.items : null}
-        toggleModal={toggleModal}
-        setActiveReminder={setActiveReminder}
+        toggleForm={toggleForm}
+        toggleList={toggleList}
       />
     );
     if (isMatching) daysIdx++;
@@ -47,8 +47,8 @@ Week.propTypes = {
       ).isRequired
     })
   ).isRequired,
-  toggleModal: PropTypes.func.isRequired,
-  setActiveReminder: PropTypes.func.isRequired
+  toggleForm: PropTypes.func.isRequired,
+  toggleList: PropTypes.func.isRequired
 };
 
 export default Week;

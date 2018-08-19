@@ -28,6 +28,7 @@ const Wrapper = styled.header`
 const Heading = styled.h1`
   font-weight: 300;
   text-transform: uppercase;
+  min-width: 20rem;
 `;
 
 const Arrow = styled.a`

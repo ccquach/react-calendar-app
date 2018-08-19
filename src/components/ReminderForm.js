@@ -1,44 +1,26 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import range from 'lodash.range';
+import Moment from 'react-moment';
+import styles from '../styles/modal';
 
 // #region styles
 const Background = styled.div`
-  z-index: 100;
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 100vh;
-  width: 100vw;
-  transform: ${props => (props.isOpen ? 'scale(1)' : 'scale(0)')};
-  opacity: ${props => (props.isOpen ? '1' : '0')};
-  transition: all 0.4s ease-out;
+  ${styles.wrapper};
+  z-index: 200;
+`;
+
+const Heading = styled.h2`
+  ${styles.heading};
 `;
 
 const CloseButton = styled.a`
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  background-color: transparent;
-  border: none;
-  font-size: 1.6rem;
-  line-height: 1;
-  cursor: pointer;
+  ${styles.closeButton};
 `;
 
 const Form = styled.form`
-  font-size: 1.2rem;
-  z-index: 200;
-  width: 30rem;
-  border-radius: 3px;
-  padding: 4rem 5rem;
-  background-color: #ecf0f1;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  ${styles.container};
 `;
 
 const InputGroup = styled.div`
@@ -55,7 +37,7 @@ const Label = styled.label`
   margin-bottom: 1rem;
 `;
 
-const inputField = `
+const inputFieldStyles = css`
   font-family: inherit;
   width: 100%;
   padding: 0.7rem 1rem;
@@ -70,11 +52,11 @@ const inputField = `
 `;
 
 const Input = styled.input`
-  ${inputField};
+  ${inputFieldStyles};
 `;
 
 const Select = styled.select`
-  ${inputField};
+  ${inputFieldStyles};
   width: 80%;
   margin-right: 1.5rem;
 `;
@@ -94,17 +76,17 @@ const Time = styled.div`
 `;
 
 const Hour = styled.select`
-  ${inputField};
+  ${inputFieldStyles};
   width 30%;
 `;
 
 const Minute = styled.select`
-  ${inputField};
+  ${inputFieldStyles};
   width 30%;
 `;
 
 const Meridiem = styled.select`
-  ${inputField};
+  ${inputFieldStyles};
   width 30%;
 `;
 
@@ -198,8 +180,7 @@ class ReminderForm extends Component {
 
   handleClose = () => {
     // clear active reminder state so form not autocompleted on next mount
-    this.props.setActiveReminder(null);
-    this.props.toggleModal();
+    this.props.toggleForm(null, {});
   };
 
   handleDelete = () => {
@@ -238,10 +219,14 @@ class ReminderForm extends Component {
 
   render() {
     const { hour, minute, meridiem, text, color } = this.state;
-    const { isOpen, reminder } = this.props;
+    const { isOpen, reminder, activeDate } = this.props;
+
     return (
       <Background isOpen={isOpen} onClick={this.handleClose}>
         <Form onSubmit={this.handleSubmit} onClick={e => e.stopPropagation()}>
+          <Heading>
+            <Moment format="MMM. D, YYYY">{activeDate}</Moment>
+          </Heading>
           <CloseButton onClick={this.handleClose}>&times;</CloseButton>
 
           {/* Text */}
@@ -317,7 +302,7 @@ class ReminderForm extends Component {
 
 ReminderForm.propTypes = {
   isOpen: PropTypes.bool.isRequired,
-  toggleModal: PropTypes.func.isRequired,
+  toggleForm: PropTypes.func.isRequired,
   addReminder: PropTypes.func.isRequired,
   updateReminder: PropTypes.func.isRequired,
   reminder: PropTypes.shape({
@@ -325,8 +310,8 @@ ReminderForm.propTypes = {
     text: PropTypes.string.isRequired,
     color: PropTypes.string.isRequired
   }),
-  setActiveReminder: PropTypes.func.isRequired,
-  deleteReminder: PropTypes.func.isRequired
+  deleteReminder: PropTypes.func.isRequired,
+  activeDate: PropTypes.string.isRequired
 };
 
 export default ReminderForm;
