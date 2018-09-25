@@ -37,7 +37,7 @@ const RemindersList = ({ reminders, toggleForm, toggleList, activeDate }) => {
         {reminders.map(r => (
           <Item key={`listitem-${r.id}`}>
             <Reminder
-              reminder={r}
+              {...r}
               toggleForm={toggleForm.bind(this, activeDate, r)}
               padding={1.25}
               fontSize={1.3}
@@ -54,12 +54,12 @@ RemindersList.propTypes = {
     PropTypes.shape({
       time: PropTypes.string.isRequired,
       text: PropTypes.string.isRequired,
-      color: PropTypes.string.isRequired
+      color: PropTypes.string.isRequired,
     }).isRequired
   ).isRequired,
   toggleForm: PropTypes.func.isRequired,
   toggleList: PropTypes.func.isRequired,
-  activeDate: PropTypes.string.isRequired
+  activeDate: PropTypes.string.isRequired,
 };
 
 export default RemindersList;
